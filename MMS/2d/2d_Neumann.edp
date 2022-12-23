@@ -1,0 +1,506 @@
+// Code to test the 2D seird model with MMS
+
+// With Neumann BC's
+
+load "PETSc"
+include "macro_ddm.idp"
+
+// For solution output in vtk format
+load "iovtk"
+
+int[int] Order = [1]; // 1 - P1 lagrange elements 0 - P0
+
+real t1 = clock();
+
+load "gmsh"
+
+mesh Th=gmshload("./mesh/square.msh");
+
+
+int nv = Th.nv;
+cout << "Total Number of Vertices " << nv << endl;
+
+func Pk = P1; // finite element space
+
+fespace Vh(Th, Pk);
+
+// Parameters
+
+real T = 30;
+real deltaT = 0.05;
+
+real nt = lround(T/deltaT);
+
+cout << "T is " << T << " dt is " << deltaT << " nt is "<< nt << endl;
+
+real A = 100.0;
+real betaI = 3.78e-4;
+real betaE = 3.78e-4;
+real nuS = 3.94e-6;
+real nuE = 3.94e-6;
+real nuR = 3.94e-6;
+real mu = 0.0;
+real alpha = 0.0;
+real gammaR = (1./24);
+real gammaD = (1./160);
+real gammaE = 1./6;
+real nuI = 1e-8;
+real sig = (1./7);
+real transrate = 0.5;
+
+
+
+Vh [real] Uk(5); // Kth iteration solution
+Vh [real] Uprev(5); // Previous Time step solution
+Vh [real] U(5); // Current Iteration solution
+Vh [real] Uini(5);
+Vh [real] Utruth(5);
+
+
+// Manufactured  Solutions SEIRD
+
+real k = 10.0;
+real c = 0.2;
+
+real t = 0.0;
+
+func struth = 500.0 + 25.0 * sin(k*x*y + c * t);
+func etruth = 300.0 + 25.0 * sin(k*x*y + c * t);
+func itruth = 200.0 + 25.0 * sin(k*x*y + c * t);
+func rtruth = 100.0 + 25.0 * sin(k*x*y + c * t);
+func dtruth = 80.0 + 25.0 * sin(k*x*y + c * t);
+
+
+func sNMleft = -250.0*y*cos(0.2*t + 10.0*x*y);
+
+func sNMright = 250.0*y*cos(0.2*t + 10.0*x*y);
+
+func sNMtop = 250.0*x*cos(0.2*t + 10.0*x*y);
+
+func sNMbottom = -250.0*x*cos(0.2*t + 10.0*x*y);
+
+
+// Initial Conditions
+
+Uini[0] = struth;
+Uini[1] = etruth;
+Uini[2] = itruth;
+Uini[3] = rtruth;
+Uini[4] = dtruth;
+
+
+// ############### Saving Initial Conditions ##############################
+savevtk("./ini/sus_ini.vtu", Th, Uini[0] , bin = 1, order = Order);
+
+savevtk("./ini/exp_ini.vtu", Th, Uini[1] , bin = 1, order = Order);
+
+savevtk("./ini/inf_ini.vtu", Th, Uini[2] , bin = 1, order = Order);
+
+savevtk("./ini/rec_ini.vtu", Th, Uini[3] , bin = 1, order = Order);
+
+savevtk("./ini/dec_ini.vtu", Th, Uini[4] , bin = 1, order = Order);
+
+// ################################################
+
+// Labels for the mesh
+
+int [int] lab = labels(Th);
+
+cout << "labels are " << lab<< endl;
+
+
+// With A
+// Susceptible
+
+func Fs = (125.0*betaE*(sin(0.2*t + 10.0*x*y) + 12.0)*(sin(0.2*t + 10.0*x*y) + 20.0)*(-A + 125.0*sin(0.2*t + 10.0*x*y) + 1180.0) + 125.0*betaI*(sin(0.2*t + 10.0*x*y) + 8.0)*
+(sin(0.2*t + 10.0*x*y) + 20)*(-A + 125.0*sin(0.2*t + 10.0*x*y) + 1180) + 12500*nuS*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*(pow(x,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*
+sin(0.2*t + 10.0*x*y) - 25.0*pow(x,2)*pow(cos(0.2*t + 10.0*x*y),2) + pow(y,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 25.0*pow(y,2)*pow(cos(0.2*t + 10.0*x*y),2))
++5.0*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*cos(0.2*t + 10.0*x*y))/(25.0*sin(0.2*t + 10.0*x*y) + 236.0);
+
+
+// With A
+// Exposed
+func Fe = (-125.0*betaE*(sin(0.2*t + 10.0*x*y) + 12.0)*(sin(0.2*t + 10.0*x*y) + 20.0)*(-A + 125.0*sin(0.2*t + 10.0*x*y) + 1180.0) - 125.0*betaI*(sin(0.2*t + 10.0*x*y) + 8.0)*
+(sin(0.2*t + 10.0*x*y) + 20.0)*(-A + 125.0*sin(0.2*t + 10.0*x*y) + 1180) + 25.0*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*(gammaE*(sin(0.2*t + 10.0*x*y) + 12.0) +
+sig*(sin(0.2*t + 10.0*x*y) + 12.0) + 500.0*nuE*pow(x,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 12500.0*nuE*pow(x,2)*pow(cos(0.2*t + 10.0*x*y),2) +
+500.0*nuE*pow(y,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 12500.0*nuE*pow(y,2)*pow(cos(0.2*t + 10.0*x*y),2)) + 5.0*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*
+cos(0.2*t + 10.0*x*y)) / (25.0*sin(0.2*t + 10.0*x*y) + 236.0);
+
+
+// Infected
+
+func Fi = 25.0*gammaD*(sin(0.2*t + 10.0*x*y) + 8.0) + 25.0*gammaR*(sin(0.2*t + 10.0*x*y) + 8.0) - 25.0*sig*(sin(0.2*t + 10.0*x*y) + 12.0) +
+12500.0*nuI*pow(x,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 312500.0*nuI*pow(x,2)*pow(cos(0.2*t + 10.0*x*y),2) +
+12500.0*nuI*pow(y,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 312500.0*nuI*pow(y,2)*pow(cos(0.2*t + 10.0*x*y),2) +
+5.0*cos(0.2*t + 10.0*x*y);
+
+//Rcovered
+
+func Fr = -25.0*gammaE*(sin(0.2*t + 10.0*x*y) + 12.0) - 25.0*gammaR*(sin(0.2*t + 10.0*x*y) + 8.0) +
+12500.0*nuR*pow(x,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 312500.0*nuR*pow(x,2)*pow(cos(0.2*t + 10.0*x*y),2) +
+12500.0*nuR*pow(y,2)*(25.0*sin(0.2*t + 10.0*x*y) + 236.0)*sin(0.2*t + 10.0*x*y) - 312500.0*nuR*pow(y,2)*pow(cos(0.2*t + 10.0*x*y),2) +
+5.0*cos(0.2*t + 10.0*x*y);
+
+//Deceased
+
+func Fd = -25.0*gammaD*(sin(0.2*t + 10.0*x*y) + 8.0) + 5.0*cos(0.2*t + 10.0*x*y);
+
+
+
+// ################. Weak Forms of Compartments  with Dirichlet BC #####################################################
+Vh vS,vE, vI, vR, vD;
+Vh Scur, Ecur,Icur, Rcur, Dcur;
+
+Vh Sprev,Eprev,Iprev,Rprev,Dprev;
+
+Vh Sk,Ek,Ik,Rk,Dk, Nk;
+
+macro Grad(u) [dx(u), dy(u)] // EOM
+
+
+// Weak forms Compartments with Implicit
+
+varf susceptible(Scur, vS) = int2d(Th)(Scur * vS + deltaT * ( ( 1.0- A/Nk) * betaI * Scur * Ik * vS)
+                                       + deltaT * ( ( 1.0- A/Nk) * betaE * Scur * Ek * vS)
+                                       + deltaT * ( Nk * mu * Scur * vS)
+                                       + deltaT * ( Nk * nuS * Grad(Scur)'*Grad(vS))  )
+                                       + int2d(Th)(Sprev * vS + deltaT*alpha*Nk*vS + Fs * deltaT * vS)
+
+                                       + int1d(Th,8)(deltaT * Nk * nuS * sNMright * vS)
+                                       + int1d(Th,10)(deltaT * Nk * nuS * sNMleft * vS)
+                                       + int1d(Th,7)(deltaT * Nk * nuS * sNMbottom * vS)
+                                       + int1d(Th,9)(deltaT * Nk * nuS * sNMtop * vS);
+
+
+varf exposed(Ecur, vE) = int2d(Th)(Ecur * vE -  deltaT * ( ( 1.0- A/Nk) * betaE * Sk * Ecur * vE)
+                                       + deltaT * ( (sig + gammaE) *  Ecur * vE)
+                                       + deltaT * ( Nk * mu * Ecur * vE)
+                                       + deltaT * ( Nk * nuE *  (Grad(Ecur)'*Grad(vE)) ) )
+
+
+                                       + int2d(Th)( Eprev * vE + deltaT * ( ( 1.0- A/Nk) * betaI * Sk * Ik * vE) + Fe * deltaT * vE )
+
+                                       + int1d(Th,8)(deltaT * Nk * nuE * sNMright * vE)
+                                       + int1d(Th,10)(deltaT * Nk * nuE * sNMleft * vE)
+                                       + int1d(Th,7)(deltaT * Nk * nuE * sNMbottom * vE)
+                                       + int1d(Th,9)(deltaT * Nk * nuE * sNMtop * vE);
+
+
+varf infected(Icur, vI) = int2d(Th)(Icur * vI + deltaT * ( (gammaD + gammaR)*Icur * vI)
+                                       + deltaT * ( Nk * mu * Icur * vI)
+                                       + deltaT * ( Nk * nuI *  (Grad(Icur)'*Grad(vI)) ) )
+                                       + int2d(Th)(Iprev * vI + deltaT * ( sig * Ek * vI) + Fi * deltaT * vI )
+
+
+                                      + int1d(Th,8)(deltaT *Nk * nuI * sNMright * vI)
+                                      + int1d(Th,10)(deltaT *Nk * nuI * sNMleft * vI)
+                                      + int1d(Th,7)(deltaT *Nk * nuI * sNMbottom * vI)
+                                      + int1d(Th,9)(deltaT *Nk * nuI * sNMtop * vI);
+
+
+varf recovered(Rcur, vR) = int2d(Th)( Rcur * vR + deltaT * ( Nk * mu * Rcur * vR)
+                                       + deltaT * ( Nk * nuR *  (Grad(Rcur)'*Grad(vR)) ) )
+                                       + int2d(Th)(Rprev * vR + deltaT * ( gammaR * Ik * vR) + deltaT * ( gammaE *Ek * vR)
+                                        + Fr * deltaT * vR)
+
+                                       + int1d(Th,8)(deltaT * Nk * nuR * sNMright * vR)
+                                       + int1d(Th,10)(deltaT * Nk * nuR * sNMleft * vR)
+                                       + int1d(Th,7)(deltaT * Nk * nuR * sNMbottom * vR)
+                                       + int1d(Th,9)(deltaT * Nk * nuR * sNMtop * vR);
+
+
+varf deceased(Dcur, vD) = int2d(Th)( Dcur * vD ) + int2d(Th)( Dprev * vD + deltaT * ( gammaD * Ik * vD) + Fd * deltaT * vD );
+
+
+// ############################################################################
+
+
+for (int i =0; i<5; ++i){
+ Uprev[i] = Uini[i];
+ Uk[i] = Uini[i];
+}
+
+Mat S,E,I,R,D;
+
+createMat(Th,S,Pk);
+createMat(Th,E,Pk);
+createMat(Th,I,Pk);
+createMat(Th,R,Pk);
+createMat(Th,D,Pk);
+
+
+Vh rhsS,solS, rhsE, solE, rhsI,solI, rhsR,solR, rhsD,solD, Utotal;
+
+Vh [real] error(5);
+real errorl2;
+real tolP = 1e-8;
+
+verbosity = 0;
+
+ofstream ff("./seird2d/compartment.dat");
+
+ofstream fg("./seird2d/node_1.dat");
+
+ofstream fh("./seird2d/node_2.dat");
+
+
+ofstream fi("./seird2d/compartment_truth.dat");
+
+ofstream fj("./seird2d/node_1_truth.dat");
+
+ofstream fk("./seird2d/node_2_truth.dat");
+
+ofstream fl("./seird2d/error_whole.dat");
+
+ofstream fm("./seird2d/error_node.dat");
+
+
+real[int, int] out(nt,5);
+
+real[int, int] outtruth(nt,5);
+
+
+real[int, int] node1(nt,5);
+
+real[int, int] node1truth(nt,5);
+
+
+real[int, int] node2(nt,5);
+
+real[int, int] node2truth(nt,5);
+
+real[int,int] outerror(nt,1);
+
+real[int,int] nodeerror(nt,2);
+
+
+
+set(S, sparams="-ksp_type gmres -pc_type asm");
+set(E, sparams="-ksp_type gmres -pc_type asm");
+set(I, sparams="-ksp_type gmres -pc_type asm");
+set(R, sparams="-ksp_type gmres -pc_type asm");
+set(D, sparams="-ksp_type gmres -pc_type asm");
+
+
+
+for (int i =0; i < nt; ++i)
+{
+
+    // Previous Time step Solutions
+    t = (i+1)*deltaT;
+
+    Sprev = Uprev[0];
+    Eprev = Uprev[1];
+    Iprev = Uprev[2];
+    Rprev = Uprev[3];
+    Dprev = Uprev[4];
+
+
+
+    for (int k =0; k <50 ; ++k)
+    {
+            // Kth Iteration Solutions for Newton/Picard Linearization
+
+
+        errorl2 = 0.0;
+
+        Sk = Uk[0];
+        Ek = Uk[1];
+        Ik = Uk[2];
+        Rk = Uk[3];
+        Dk = Uk[4];
+
+
+        Nk = Sk+Ek+Ik+Rk+Dk;
+
+
+        S = susceptible(Vh,Vh,tgv = -1);
+        rhsS[] = susceptible(0,Vh, tgv = -1);
+        U[0][] = S^(-1) * rhsS[];
+        Sk = U[0];
+
+        E = exposed(Vh,Vh, tgv = -1);
+        rhsE[] = exposed(0,Vh,tgv = -1);
+        U[1][] = E^(-1) * rhsE[];
+        Ek = U[1];
+
+
+        I = infected(Vh,Vh,tgv = -1);
+        rhsI[] = infected(0,Vh,tgv = -1);
+        U[2][] = I^(-1) * rhsI[];
+        Ik = U[2];
+
+        R = recovered(Vh,Vh,tgv = -1);
+        rhsR[] = recovered(0,Vh,tgv = -1);
+        U[3][] = R^(-1) * rhsR[];
+        Rk = U[3];
+
+        D = deceased(Vh,Vh,tgv = -1);
+        rhsD[] = deceased(0,Vh,tgv = -1);
+        U[4][] = D^(-1) * rhsD[];
+        Dk = U[4];
+
+
+        for(int j=0;j<5;++j)
+        {
+
+            error[j] = U[j] - Uk[j];
+            errorl2 += error[j][].l2/U[k][].l2;
+        }
+
+        cout << "iteration " << k +"     "<< errorl2 << endl;
+
+
+        // Update
+
+        for(int j=0;j<5;++j)
+        {
+
+            Uk[j] = U[j];
+        }
+
+        if(errorl2 < tolP)
+        {
+            break;
+            cout << "Exiting Picard Loop";
+        }
+
+        if(k > 49)
+        {
+            cout << "exit after 50 iterations";
+            break;
+        }
+
+
+    }
+// Finished Picard Loop
+
+// Update new timestep solution
+
+    for(int j=0;j<5;++j)
+            {
+
+                Uprev[j] = U[j];
+            }
+
+cout << "Time step number " << i + " time " << t + "days" << endl;
+
+
+// Output solution in suitable format
+
+// True Solution
+
+Utruth[0] = struth;
+Utruth[1] = etruth;
+Utruth[2] = itruth;
+Utruth[3] = rtruth;
+Utruth[4] = dtruth;
+
+
+Vh uz,vz;
+
+varf zdomain(uz,vz) = int2d(Th)(1*vz);
+
+Vh Z;
+
+Z[] = zdomain(0,Vh);
+
+real errfunc = 0.0;
+real errfuncl2 = 0.0;
+real  errnode1 = 0.0;
+real errl2vec = 0.0;
+real  errnode2 = 0.0;
+
+Vh [real] diff(5);
+
+for(int l=0;l<5; ++l)
+{
+
+    out(i,l) = U[l][]'*Z[];
+    outtruth(i,l) = Utruth[l][]'*Z[];
+
+
+    node1(i,l) = U[l][](313);
+    node2(i,l) = U[l][](480);
+
+
+    node1truth(i,l) = Utruth[l][](313);
+    node2truth(i,l) = Utruth[l][](480);
+
+    errfunc += sqrt( int2d(Th) ( ( (Utruth[l] - U[l])/Utruth[l] ) ^2 ) );
+
+    errfuncl2 += sqrt( int2d(Th) ( (Utruth[l] - U[l])^2 ) ) / sqrt( int2d(Th)  ( ( Utruth[l] ) ^2 ) );
+
+
+    diff[l] = (Utruth[l] - U[l]);
+
+
+    errl2vec += ( diff[l][].l2 / Utruth[l][].l2 )  ;
+
+
+    errnode1  += abs(Utruth[l][](313) - U[l][](313))/Utruth[l][](313);
+
+
+    errnode2  += abs(Utruth[l][](480) - U[l][](480))/Utruth[l][](480);
+
+
+}
+
+
+outerror(i,0) = errl2vec;
+
+cout << "error at time step  " << errfunc << endl;
+
+cout << "error at time step  " << errfuncl2 << endl;
+
+cout << "error at time step  " << errl2vec << endl;
+
+
+cout << "error at nodes at time step  " << errnode1 << "  " << errnode2 << endl;
+
+
+nodeerror(i,0) = errnode1;
+
+nodeerror(i,1) = errnode2;
+
+
+Utotal = U[0] + U[1] + U[2] + U[3] + U[4];
+
+    // Integrating the solution over the whole domain
+
+
+if(i % 100 == 0)
+{
+    savevtk("./output/u_susceptible.vtu", Th, U[0] , bin = 1, order = Order, append = true);
+    savevtk("./output/u_exposed.vtu", Th, U[1] , bin = 1, order = Order, append = true);
+    savevtk("./output/u_infected.vtu", Th, U[2] , bin = 1, order = Order, append = true);
+    savevtk("./output/u_recovered.vtu", Th, U[3] , bin = 1, order = Order, append = true);
+    savevtk("./output/u_deceased.vtu", Th, U[4] , bin = 1, order = Order, append = true);
+    savevtk("./output/u_total.vtu", Th, Utotal , bin = 1, order = Order, append = true);
+
+
+}
+
+
+
+
+// End of Time loop
+}
+
+real t2 = clock();
+
+cout << "Total Time taken  " << t2-t1;
+
+
+
+
+ff << out << endl;
+fg << node1 << endl;
+fh << node2 << endl;
+fi << outtruth << endl;
+fj << node1truth << endl;
+fk << node2truth << endl;
+fl << outerror << endl;
+
+fm << nodeerror << endl;
+

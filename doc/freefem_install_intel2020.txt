@@ -1,0 +1,93 @@
+Installation of FreeFem in Remote Machine
+
+Tested - CEDAR and NIAGARA, BELUGA and GRAHAM (Compute Canada)
+
+
+
+1. Load the environment and packages as below for Graham, Cedar and Beluga
+
+    1.1 module --force purge --all
+    1.2 module load StdEnv/2020
+    1.3 module load intelmpi/2019.7.217
+
+Output should look like below :
+
+  Currently Loaded Modules:
+  1) CCconfig                 5) intel/2020.1.217    (t)
+  2) gentoo/2020     (S)      6) StdEnv/2020         (S)
+  3) gcccore/.9.3.0  (H)      7) ucx/1.8.0
+  4) imkl/2020.1.217 (math)   8) intelmpi/2019.7.217 (m)
+
+   For Niagara do
+
+    1.1 module --force purge --all
+    1.2 module load CCEnv
+    1.3 module load StdEnv/2020
+    1.4 module load openmpi/4.0.3
+
+Currently Loaded Modules:
+  1) CCEnv          (S)   5) imkl/2020.1.217  (math)   9) openmpi/4.0.3 (m)
+  2) CCconfig             6) intel/2020.1.217 (t)     10) StdEnv/2020   (S)
+  3) gentoo/2020    (S)   7) ucx/1.8.0                11) mii/1.1.2
+  4) gcccore/.9.3.0 (H)   8) libfabric/1.10.1
+
+
+
+2. wget https://github.com/FreeFem/FreeFem-sources/archive/refs/tags/v4.9.tar.gz
+
+3. tar -xf v4.9.tar.gz
+
+#####################################
+Note: Versions installed in machines are slightly different
+
+CEDAR:
+2. wget https://github.com/FreeFem/FreeFem-sources/archive/refs/tags/v4.10.tar.gz
+3. tar -xf v4.10.tar.gz
+
+#####################################
+
+For BELUGA AND CEDAR
+#####################################
+
+change the first line of file "./FreeFem-sources/3rdparty/getall"
+as:
+"#!/bin/env perl"
+#####################################
+
+
+4. cd FreeFem-sources
+
+5. autoreconf -i
+
+The configure parameters  --without-hdf5 --disable-yams are added to avoid errors which came up during installation and mayn’t be same for every installation.
+
+6. ./configure CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort --without-hdf5 --disable-yams --with-mkl --enable-mkl-mlt --prefix=$PWD/install
+
+7. cd 3rdparty/ff-petsc && make petsc-slepc
+
+8. cd - && ./reconfigure
+
+9. make
+
+Note that some tests can fail or skip while installation. Sample "test-suite_nameoffolder.txt" files generated while installing in NIAGARA machine are provided in the folder "mbe_covid/doc".
+The log files correspond to different folders inside "FreeFem-sources/examples/". User can atleast run the below command in these correspnding folders and compare with the files provided to ensure proper installation.
+
+
+10. make check
+
+
+If you find that many tests are failing in comaprison to the log files provided, please contact the support for FreeFEM++ by sending them the below log files.
+
+
+Log files :
+
+Config file FreeFEM : /FreeFem-sources/config.log
+
+Config file PETSc : /FreeFem-sources/3rdparty/ff-petsc/petsc-versionnumber/configure.log
+
+Configuration parameter file for FreeFEM : /FreeFem-sources/config.param
+
+
+
+
+

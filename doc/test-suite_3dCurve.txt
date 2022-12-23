@@ -1,0 +1,128 @@
+==================================================
+   FreeFEM 4.9: examples/3dCurve/test-suite.log
+==================================================
+
+# TOTAL: 10
+# PASS:  10
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  0
+# XPASS: 0
+# ERROR: 0
+
+.. contents:: :depth: 2
+
+PASS: buildParametricMeshL.edp
+==============================
+
+
+PASS: LaplacianCurve.edp
+========================
+
+6	
+	  0	  1	  1	  1	  0
+	0.1	
+ len ThL3 = 1.00499
+0
+0.37875  ~ 0.372359
+1.00499
+
+PASS: extractMeshes.edp
+=======================
+
+
+PASS: elasticstring.edp
+=======================
+
+
+PASS: tutomesh1d.edp
+====================
+
+ Element : 
+0 1:  0 10 , 1 0
+1 2:  1 0 , 2 0
+2 3:  2 0 , 3 0
+3 4:  3 0 , 4 11
+0 0 0 10
+1 0 0 0
+2 0 0 0
+3 0 0 0
+4 0 0 11
+ be 0 0 10
+ be 1 1 11
+ Track 0.5 N 0 0 0 Tl= 1 0 0
+ Track 0.5 N 0 0 0 Tl= 1 0 0
+ Track 0.112702 N 0 0 0 Tl= 1 0 0
+ Track 0.112702 N 0 0 0 Tl= 1 0 0
+ Track 0.887298 N 0 0 0 Tl= 1 0 0
+ Track 0.887298 N 0 0 0 Tl= 1 0 0
+ Track 1.5 N 0 0 0 Tl= 1 0 0
+ Track 1.1127 N 0 0 0 Tl= 1 0 0
+ Track 1.8873 N 0 0 0 Tl= 1 0 0
+ Track 2.5 N 0 0 0 Tl= 1 0 0
+ Track 2.1127 N 0 0 0 Tl= 1 0 0
+ Track 2.8873 N 0 0 0 Tl= 1 0 0
+ Track 3.5 N 0 0 0 Tl= 1 0 0
+ Track 3.1127 N 0 0 0 Tl= 1 0 0
+ Track 3.8873 N 0 0 0 Tl= 1 0 0
+ Track 0 N -1 -0 -0 Tl= 1 0 0
+ Track 0 N -1 -0 -0 Tl= 1 0 0
+  -- AssembleLinearForm L, discontinous Galerkin  =0 binside = 0 levelset integration 0 withmap: 0 kind int: 7
+10  Optimized = 1, 
+ Track 0 N -1 -0 -0 Tl= 1 0 0
+ A = #  HashMatrix Matrix (COO) 0x298b920
+#    n       m        nnz     half     fortran   state  
+5 5 13 0 0 0 0 
+         0         0 2
+         0         1 -1
+         1         0 -1
+         1         1 2
+         1         2 -1
+         2         1 -1
+         2         2 2
+         2         3 -1
+         3         2 -1
+         3         3 2
+         3         4 -1
+         4         3 -1
+         4         4 1
+
+ b = 5	
+	 -1	  0	  0	  0	  0
+	
+ ## SetSolver 0x298b920 0x299c8c0 0
+    ~HashMatrix:   Mean collision in hash: 0.727273 0x298b920 rank: 0 matmul 0s
+times: compile 0.011087s, execution 0.001117s,  mpirank:0
+ CodeAlloc : nb ptr  3930,  size :506032 mpirank: 0
+Ok: Normal End
+
+PASS: periodicL.edp
+===================
+
+ err 1 = 1.12146e-06
+
+PASS: basicGlue.edp
+===================
+
+test nv: 9 nt: 8 nbe: 5
+rebuildBorder test nv: 9 nt: 8 nbe: 3
+
+PASS: WaveEquation-new1d.edp
+============================
+
+
+PASS: periodicL.edp
+===================
+
+ err 1 = 1.12146e-06
+
+PASS: QMoscillator-new1d.edp
+============================
+
+Eigenvalue[0] = 1.0025
+Eigenvalue[1] = 3.01246
+Eigenvalue[2] = 5.0323
+Eigenvalue[3] = 7.06196
+Eigenvalue[4] = 9.10135
+Eigenvalue[5] = 11.1504
+

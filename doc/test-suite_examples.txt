@@ -1,0 +1,154 @@
+===================================================
+   FreeFEM 4.9: examples/examples/test-suite.log
+===================================================
+
+# TOTAL: 18
+# PASS:  17
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  1
+# XPASS: 0
+# ERROR: 0
+
+.. contents:: :depth: 2
+
+FAIL: NSNewton.edp
+==================
+
+
+PASS: NSprojection.edp
+======================
+
+ iter 0 Err L2 = 0.413011 - Outflow = -0.301572
+ iter 1 Err L2 = 0.203585 - Outflow = 0.271297
+ iter 2 Err L2 = 0.083389 - Outflow = -0.0892434
+ iter 3 Err L2 = 0.0353095 - Outflow = 0.0392498
+ iter 4 Err L2 = 0.0184719 - Outflow = 0.00464259
+ iter 5 Err L2 = 0.013646 - Outflow = 0.00713171
+ iter 6 Err L2 = 0.0111481 - Outflow = 0.0103824
+ iter 7 Err L2 = 0.00950452 - Outflow = 0.00733761
+ iter 8 Err L2 = 0.00850541 - Outflow = 0.00251868
+ iter 9 Err L2 = 0.00773153 - Outflow = -0.000622473
+ iter 10 Err L2 = 0.00712059 - Outflow = -0.00160648
+ iter 11 Err L2 = 0.00662607 - Outflow = -0.00157056
+ iter 12 Err L2 = 0.00621177 - Outflow = -0.00146602
+ iter 13 Err L2 = 0.00586296 - Outflow = -0.0015471
+ iter 14 Err L2 = 0.00556732 - Outflow = -0.00190856
+ iter 15 Err L2 = 0.00533052 - Outflow = -0.00278413
+ iter 16 Err L2 = 0.00513969 - Outflow = -0.00383368
+ iter 17 Err L2 = 0.00497875 - Outflow = -0.00424761
+ iter 18 Err L2 = 0.00484641 - Outflow = -0.00401324
+ iter 19 Err L2 = 0.0047298 - Outflow = -0.00381665
+ iter 20 Err L2 = 0.00462431 - Outflow = -0.00387875
+ iter 21 Err L2 = 0.00452992 - Outflow = -0.00396142
+ iter 22 Err L2 = 0.00444316 - Outflow = -0.00396097
+ iter 23 Err L2 = 0.00436123 - Outflow = -0.00393333
+ iter 24 Err L2 = 0.00428116 - Outflow = -0.00389695
+ iter 25 Err L2 = 0.00420187 - Outflow = -0.00382648
+ iter 26 Err L2 = 0.00412449 - Outflow = -0.00370718
+ iter 27 Err L2 = 0.00404869 - Outflow = -0.00356317
+ iter 28 Err L2 = 0.00397432 - Outflow = -0.00339968
+ iter 29 Err L2 = 0.00389997 - Outflow = -0.00321403
+ iter 30 Err L2 = 0.00382702 - Outflow = -0.00303399
+ iter 31 Err L2 = 0.00375587 - Outflow = -0.00287695
+ iter 32 Err L2 = 0.00368554 - Outflow = -0.00275148
+ iter 33 Err L2 = 0.00361744 - Outflow = -0.00266503
+ iter 34 Err L2 = 0.0035518 - Outflow = -0.00260233
+ iter 35 Err L2 = 0.00348843 - Outflow = -0.00254901
+ iter 36 Err L2 = 0.00342625 - Outflow = -0.00250931
+ iter 37 Err L2 = 0.00336553 - Outflow = -0.00247562
+ iter 38 Err L2 = 0.00330642 - Outflow = -0.0024433
+ iter 39 Err L2 = 0.00324882 - Outflow = -0.00240876
+ iter 40 Err L2 = 0.00319403 - Outflow = -0.0023603
+ iter 41 Err L2 = 0.00314141 - Outflow = -0.00229749
+ iter 42 Err L2 = 0.00309164 - Outflow = -0.00223294
+ iter 43 Err L2 = 0.00304469 - Outflow = -0.0021785
+ iter 44 Err L2 = 0.00300007 - Outflow = -0.00215182
+ iter 45 Err L2 = 0.0029575 - Outflow = -0.00215237
+ iter 46 Err L2 = 0.00291589 - Outflow = -0.00218658
+ iter 47 Err L2 = 0.00287593 - Outflow = -0.00224934
+ iter 48 Err L2 = 0.00283707 - Outflow = -0.00233303
+ iter 49 Err L2 = 0.00280014 - Outflow = -0.00229172
+ iter 50 Err L2 = 0.0511153 - Outflow = -0.0870707
+ iter 51 Err L2 = 0.0223711 - Outflow = 0.0325056
+ iter 52 Err L2 = 0.0114626 - Outflow = -0.0508431
+ iter 53 Err L2 = 0.00785991 - Outflow = 0.0312427
+ iter 54 Err L2 = 0.00718268 - Outflow = -0.0347261
+ iter 55 Err L2 = 0.0066274 - Outflow = 0.0192517
+ iter 56 Err L2 = 0.00600972 - Outflow = -0.0238092
+ iter 57 Err L2 = 0.00543185 - Outflow = 0.012477
+ iter 58 Err L2 = 0.00490999 - Outflow = -0.0175533
+ iter 59 Err L2 = 0.00445769 - Outflow = 0.0063817
+ iter 60 Err L2 = 0.00406993 - Outflow = -0.0132774
+ iter 61 Err L2 = 0.00375807 - Outflow = 0.00300093
+ iter 62 Err L2 = 0.00350562 - Outflow = -0.0099293
+ iter 63 Err L2 = 0.00330551 - Outflow = 0.000734873
+ iter 64 Err L2 = 0.00314332 - Outflow = -0.00781105
+ iter 65 Err L2 = 0.00301304 - Outflow = -0.000726922
+ iter 66 Err L2 = 0.00290548 - Outflow = -0.00627074
+ iter 67 Err L2 = 0.00281555 - Outflow = -0.0015461
+ iter 68 Err L2 = 0.00273866 - Outflow = -0.00511891
+ iter 69 Err L2 = 0.00267131 - Outflow = -0.00197276
+ iter 70 Err L2 = 0.00261126 - Outflow = -0.00429475
+ iter 71 Err L2 = 0.0025566 - Outflow = -0.00222218
+ iter 72 Err L2 = 0.00250598 - Outflow = -0.00372473
+ iter 73 Err L2 = 0.00245816 - Outflow = -0.0023393
+ iter 74 Err L2 = 0.00241234 - Outflow = -0.00328803
+ iter 75 Err L2 = 0.00236807 - Outflow = -0.00235044
+ iter 76 Err L2 = 0.00232502 - Outflow = -0.00294845
+ iter 77 Err L2 = 0.00228289 - Outflow = -0.00231503
+ iter 78 Err L2 = 0.0022417 - Outflow = -0.00268014
+ iter 79 Err L2 = 0.00220108 - Outflow = -0.00223688
+ iter 80 Err L2 = 0.00216106 - Outflow = -0.00245255
+ iter 81 Err L2 = 0.00212129 - Outflow = -0.00214357
+ iter 82 Err L2 = 0.0020824 - Outflow = -0.00227027
+ iter 83 Err L2 = 0.00204426 - Outflow = -0.00206072
+ iter 84 Err L2 = 0.00200698 - Outflow = -0.00214625
+ iter 85 Err L2 = 0.00197027 - Outflow = -0.00201276
+ iter 86 Err L2 = 0.0019342 - Outflow = -0.00207976
+ iter 87 Err L2 = 0.00189867 - Outflow = -0.00201207
+ iter 88 Err L2 = 0.00186377 - Outflow = -0.00207516
+ iter 89 Err L2 = 0.00182956 - Outflow = -0.00205358
+ iter 90 Err L2 = 0.00179593 - Outflow = -0.00212505
+ iter 91 Err L2 = 0.00176296 - Outflow = -0.00213728
+ iter 92 Err L2 = 0.0017307 - Outflow = -0.0022114
+ iter 93 Err L2 = 0.00169916 - Outflow = -0.0022557
+ iter 94 Err L2 = 0.00166817 - Outflow = -0.0023351
+ iter 95 Err L2 = 0.00163783 - Outflow = -0.00239044
+ iter 96 Err L2 = 0.00160815 - Outflow = -0.00246827
+ iter 97 Err L2 = 0.00157908 - Outflow = -0.00252491
+ iter 98 Err L2 = 0.00155054 - Outflow = -0.00258586
+ iter 99 Err L2 = 0.00152254 - Outflow = -0.00227504
+ iter 100 Err L2 = 0.00354461 - Outflow = -5.39293e-05
+ iter 101 Err L2 = 0.0024164 - Outflow = 0.00298674
+ iter 102 Err L2 = 0.00192198 - Outflow = -0.003952
+ iter 103 Err L2 = 0.00173143 - Outflow = 0.000965673
+ iter 104 Err L2 = 0.00163684 - Outflow = -0.00234314
+ iter 105 Err L2 = 0.00157329 - Outflow = 0.00171604
+ iter 106 Err L2 = 0.00151811 - Outflow = -0.00119601
+ iter 107 Err L2 = 0.0014739 - Outflow = 0.000571265
+ iter 108 Err L2 = 0.00143635 - Outflow = -0.00219824
+ iter 109 Err L2 = 0.00140358 - Outflow = -0.00106893
+ iter 110 Err L2 = 0.0013734 - Outflow = -0.00276912
+ iter 111 Err L2 = 0.00134575 - Outflow = -0.00168237
+ iter 112 Err L2 = 0.00132007 - Outflow = -0.00265224
+ iter 113 Err L2 = 0.00129622 - Outflow = -0.00177507
+ iter 114 Err L2 = 0.00127347 - Outflow = -0.00238212
+ iter 115 Err L2 = 0.00125199 - Outflow = -0.00172952
+ iter 116 Err L2 = 0.00123156 - Outflow = -0.00213315
+ iter 117 Err L2 = 0.00121215 - Outflow = -0.00167448
+ iter 118 Err L2 = 0.00119357 - Outflow = -0.00197647
+ iter 119 Err L2 = 0.00117573 - Outflow = -0.00170027
+ iter 120 Err L2 = 0.0011585 - Outflow = -0.00195611
+ iter 121 Err L2 = 0.0011419 - Outflow = -0.00180388
+ iter 122 Err L2 = 0.00112574 - Outflow = -0.0020092
+ iter 123 Err L2 = 0.00110995 - Outflow = -0.00190494
+ iter 124 Err L2 = 0.0010945 - Outflow = -0.00202644
+ iter 125 Err L2 = 0.00107932 - Outflow = -0.00192115
+ iter 126 Err L2 = 0.00106428 - Outflow = -0.00196773
+ iter 127 Err L2 = 0.00104953 - Outflow = -0.00185335
+ iter 128 Err L2 = 0.00103507 - Outflow = -0.00185901
+ iter 129 Err L2 = 0.00102091 - Outflow = -0.00176917
+ iter 130 Err L2 = 0.00100709 - Outflow = -0.00177556
+ iter 131 Err L2 = 0.000993631 - Outflow = -0.00173068
+

@@ -1,0 +1,22 @@
+=================================================
+   FreeFEM 4.9: examples/3dSurf/test-suite.log
+=================================================
+
+# TOTAL: 12
+# PASS:  12
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  0
+# XPASS: 0
+# ERROR: 0
+
+.. contents:: :depth: 2
+
+PASS: buildMeshSfromMesh3.edp
+=============================
+
+
+PASS: Laplace3dSP2.edp
+======================
+
+

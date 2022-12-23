@@ -1,0 +1,83 @@
+Instructions to run code in Parallel for FreeFEM++ in DRAC machines.
+
+
+
+1. Create a Freefem init file as below
+
+Refer documentation for more details : (https://doc.freefem.org/introduction/installation.html) under heading Environment variables and init file.
+
+inside $(HOME)/.freefem++.pref.
+
+
+    1.1 cd $(HOME)
+
+    1.2 vi .freefem++.pref
+
+    ############### Sample of file #################################
+
+
+    verbosity = 0
+    loadpath += "/home/sudhipv/software/FreeFem-sources/plugin/mpi"
+    includepath += "/home/sudhipv/software/FreeFem-sources/idp"
+
+
+    #################################################################
+
+
+2.(If its not already loaded) load the same modules as you used for installation.
+
+    Only for Niagara
+
+    2.1 module load CCEnv
+
+    2.2 module load StdEnv/2020
+
+    Graham and Cedar by default has StdEnv/2020
+
+    2.3 module load intelmpi
+
+3. Clone the repository
+
+    3.1 git clone https://sudhipv@bitbucket.org/sudhipv/mbe_covid.git
+
+
+4. cd mbe_covid/ontario
+
+Note : Output can be visualized by uncommenting the savevtk command inside the ".edp" file.
+Lines 367 - 375 for initial conitions, lines 726-735 for final output.
+The vtk files are only created for some particular time steps, user can change that in the above lines.
+Be sure to create the output folder as "mkdir ./output" inside the same folder as the code (.edp file) resides to save these .vtk files.
+
+
+Note: The batch file is just a sample and user needs to modify parameters such as account name, email, FreeFEM++ location etc. in order to run the code.
+Also, note that the script file should be inside the same folder as the .edp file to succesfully run the code.
+
+5. Submit script using batch file as given in runff_niagara.sh inside present folder.
+
+    5.1 sbatch runff_niagara.sh
+
+
+
+
+It will create files similar to ones shown below. Here the code is ran with 4 subdomains. ".pvd" file combines all the vtu files.
+
+u_poisson_4_0000_0.vtu
+u_poisson_4_0000_1.vtu
+u_poisson_4_0000_2.vtu
+u_poisson_4_0000_3.vtu
+u_poisson_4.pvd
+
+
+6. Copy all the .vtu and .pvd files to local machine for contour plots as in Fig.11 and Fig 12.
+
+7. "compartment_scal.dat" contains the integrated value for all the five compartments for all timesteps. Copy this file to generate the time trace of infections as in : Fig.10 of article.
+
+8. Files "iterScal.dat" and "N_scal.dat" are the Picard iteration counts for each time step and sum of all compartments at each time step. These are just for information.
+
+
+
+
+
+
+
+
