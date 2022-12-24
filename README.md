@@ -6,8 +6,10 @@ This repository contains codes used for generating the results in the paper titl
 Note that the code has only been tested on DIGITAL RESEARCH ALLIANCE OF CANADA (DRAC) machines  (https://docs.alliancecan.ca/wiki/Technical_documentation).
 
 ![south_ON](https://user-images.githubusercontent.com/121322281/209414633-39038460-9c30-49f7-b6ef-e7183f71a912.jpeg)
+### The Southern Ontario domain divided in to 200 subdomains.
 
 ![inf_50](https://user-images.githubusercontent.com/121322281/209414526-61b6cdd4-d1a6-4135-be34-31f4157b5890.png)
+### Infected density of Southern Ontario at 50 days from Sep 1st 2020.
 
 # Packages Needed
 
