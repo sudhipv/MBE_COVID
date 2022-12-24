@@ -5,6 +5,9 @@
 This repository contains codes used for generating the results in the paper titled "Scalable computational algorithms for geo-spatial COVID-19 spread in high performance computing".
 Note that the code has only been tested on DIGITAL RESEARCH ALLIANCE OF CANADA (DRAC) machines  (https://docs.alliancecan.ca/wiki/Technical_documentation).
 
+![south_ON](https://user-images.githubusercontent.com/121322281/209414633-39038460-9c30-49f7-b6ef-e7183f71a912.jpeg)
+
+![inf_50](https://user-images.githubusercontent.com/121322281/209414526-61b6cdd4-d1a6-4135-be34-31f4157b5890.png)
 
 # Packages Needed
 
