@@ -11,19 +11,20 @@ Note that the code has only been tested on DIGITAL RESEARCH ALLIANCE OF CANADA (
 ![inf_50](https://user-images.githubusercontent.com/121322281/209414526-61b6cdd4-d1a6-4135-be34-31f4157b5890.png)
 ### Infected density of Southern Ontario at 50 days from Sep 1st 2020.
 
+
 # Packages Needed
 
-1. Gmsh - For pre-processing :  https://gmsh.info/#Documentation 
+1. Gmsh - For pre-processing :  https://gmsh.info/#Documentation (Tested with 3.0.4)
 	
 	Gmsh is used for generating the corresponding mesh files necessary for simulation and scalability studies. Currently a mesh file is added to "ontario/mesh/south/southON.msh" which is for the domain of Southern Onatrio having 
 	209429 vertices for coarse grid and 834586 vertices in fine grid. Similarly one mesh for square domain can be found at "MMS/2d/mesh/square.msh" with 606 vertices. If the user wishes to try out different desnity of mesh sizes, 
 	the above package can be installed in local machine for preprocessing and then the generated .msh files can be transferred to cluster. 		
 
-2. FreeFEM - For model and domain decomposition-based solver : https://doc.freefem.org/introduction/index.html
+2. FreeFEM - For model and domain decomposition-based solver : https://doc.freefem.org/introduction/index.html (Tested with v4.9)
 
 	This package is necessray to be installed in cluster for compilation and simulation of the model.
 	
-3. Paraview - For post-processing :  https://www.paraview.org/about/
+3. Paraview - For post-processing :  https://www.paraview.org/about/ (Tested with 5.8.1)
 
 	This is a post-processing package which can be used for viewing results generated from the FreeFEM solver. User can install this package in local machine and copy files from cluster (such as .vtu and .pvd files).
 
@@ -39,7 +40,7 @@ Note that the code has only been tested on DIGITAL RESEARCH ALLIANCE OF CANADA (
 
 # Steps for compilation and Running the code
 
-1. Install Gmsh in your cluster. : Follow instructions from the page : https://gitlab.onelab.info/gmsh/gmsh/
+1. Install Gmsh in your local machine/cluster depending on your preference : Follow instructions from the page : https://gitlab.onelab.info/gmsh/gmsh/
 2. Install FreeFEM in your respective cluster. Instructions for installing it in DRAC machines are provided inside "doc/freefem_install_intel2020.txt".
 3. Install paraview in your local machine for viewing the generated results.
 4. Compile and run the code in cluster following instructions in "doc/instructions_parallel.txt". 
@@ -56,7 +57,7 @@ The comparison of various preconditioners can be run by modifying the code above
 Different preconditioners can be called by altering few lines of code as specified inside the code : Lines : 216 - 297.
 
 The parameters from Table 1 can be seen on lines 84-97.
-The initial condition in Eq. (5.1) can be seen on line 134
+The initial condition in Eq. (5.1) can be seen on line 134.
 The weak form in Eq. (A.1) - Eq. (A.5) in the paper can be seen on lines 376-408.
 
 
@@ -87,9 +88,9 @@ The weak form in Eq. (A.1) - Eq. (A.5) can be seen on lines 200-219.
 
 Code : MMS/2d/2d_Neumann.edp
 
-The parameters from Table 1 are found in lines 36-49
-Eq. (B.13) - Eq. (B.17) can be seen on lines 67-71
-Eq. (B.18) - Eq. (B-21) can be seen on lines 74-80
+The parameters from Table 1 are found in lines 36-49.
+Eq. (B.13) - Eq. (B.17) can be seen on lines 67-71.
+Eq. (B.18) - Eq. (B-21) can be seen on lines 74-80.
 The weak form in Eq. (A.1) - Eq. (A.5) can be seen on lines 163-212.
 
 ### 5. Section B.4 
@@ -104,9 +105,7 @@ Eq. (B.22) - Eq. (B.26) can be seen in lines 57-61.
 
 
 
-Please cite the repository if you find the information useful. 
 
-Create an issue if you have any concerns.
 
 
 
