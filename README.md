@@ -104,7 +104,9 @@ Eq. (B.22) - Eq. (B.26) can be seen in lines 57-61.
 
 
 
+Please cite the repository if you find the information useful. 
 
+Create an issue if you have any concerns.
 
 
 
