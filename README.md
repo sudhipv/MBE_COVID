@@ -1,5 +1,7 @@
 # README #
 
+Link to Published Article : https://www.aimspress.com/article/doi/10.3934/mbe.2023655
+
 # SEIRD Compartmental Model for COVID-19 Evolution
 
 This repository contains codes used for generating the results in the paper titled "Scalable computational algorithms for geo-spatial COVID-19 spread in high performance computing".
