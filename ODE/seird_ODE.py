@@ -7,7 +7,6 @@
 Computational Mechanics (2020) 66:1055–1068 https://doi.org/10.1007/s00466-020-01889-z*
 "
 """
-# CREDITS : Brandon Robinson, Carleton University.
 
 # from google.colab import drive
 # drive.mount('/content/drive')
